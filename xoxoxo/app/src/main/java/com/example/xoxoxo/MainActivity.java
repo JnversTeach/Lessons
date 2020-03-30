@@ -8,10 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    String[][] table = {{"1","1","1"},{"1","1","1"},{"1","1","1"}};
+    private String[][] table = {{"1","1","1"},{"1","1","1"},{"1","1","1"}};
+    private TextView arr00, arr01, arr02, arr10, arr11, arr12, arr20, arr21, arr22;
+    private int nhod = 1;
 
-    TextView arr00, arr01, arr02, arr10, arr11, arr12, arr20, arr21, arr22;
-    int nhod = 1;
     public View.OnClickListener clk = new View.OnClickListener() {
         public void onClick(View v) {
             int x = -1, y = -1;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             }
             nhod++;
             table[x][y] = (String) ((TextView) v).getText();
-            if (IsWin(table[x][y])) {
+            if (nhod >=5 && IsWin(table[x][y])) {
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "You Win!", Toast.LENGTH_SHORT);
                 toast.show();
@@ -72,9 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     boolean IsWin(String s) {
         for (int i = 0; i < 3; i++) {
-            if ((table[i][0].equals(s) && table[i][1].equals(s) && table[i][2].equals(s)) || (table[0][i].equals(s)  && table[1][i].equals(s) && table[2][i].equals(s)))
+            if ((table[i][0].equals(s) && table[i][1].equals(s) && table[i][2].equals(s)) ||
+                    (table[0][i].equals(s)  && table[1][i].equals(s) && table[2][i].equals(s)))
                 return true;
-            if ((table[0][0].equals(s) && table[1][1].equals(s) && table[2][2].equals(s)) || (table[2][0].equals(s) && table[1][1].equals(s) && table[0][2].equals(s)))
+            if ((table[0][0].equals(s) && table[1][1].equals(s) && table[2][2].equals(s)) ||
+                    (table[2][0].equals(s) && table[1][1].equals(s) && table[0][2].equals(s)))
                 return true;
         }
         return false;
