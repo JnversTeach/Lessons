@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
                         "Game Over.", Toast.LENGTH_SHORT);
                 toast.show();
             }
-
         }
     };
 
