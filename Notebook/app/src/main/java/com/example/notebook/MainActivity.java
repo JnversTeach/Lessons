@@ -12,8 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private final static String FILENAME = "sample.txt"; // имя файла
     private EditText notePad;
-    private Button savebtn, openbtn, copybtn, pastebtn, ctrlzbtn, ctrlybtn,lagetxtbtn, smalltxtbtn;
+    private Button saveBtn, openBtn, copyBtn, pasteBtn, ctrlzBtn, ctrlyBtn, lageTxtBtn, smallTxtBtn;
     private ArrayList<String> ctrlz = new ArrayList<String>();
     private ArrayList<String> ctrly = new ArrayList<String>();
     private boolean needToSave=true;
@@ -32,25 +34,25 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         notePad = (EditText) findViewById(R.id.editText);
-        savebtn = (Button) findViewById(R.id.button1);
-        openbtn = (Button) findViewById(R.id.button2);
-        copybtn = (Button) findViewById(R.id.button3);
-        pastebtn = (Button) findViewById(R.id.button4);
-        ctrlzbtn = (Button) findViewById(R.id.button5);
-        ctrlybtn = (Button) findViewById(R.id.button6);
-        lagetxtbtn = (Button) findViewById(R.id.button7);
-        smalltxtbtn = (Button) findViewById(R.id.button8);
-        savebtn.setOnClickListener(clcksavebtn);
-        openbtn.setOnClickListener(clckopenbtn);
-        copybtn.setOnClickListener(clckcopybtn);
-        pastebtn.setOnClickListener(clckpastebtn);
-        ctrlzbtn.setOnClickListener(clckctrlzbtn);
-        ctrlybtn.setOnClickListener(clckctrlybtn);
-        lagetxtbtn.setOnClickListener(clcklagetxtbtn);
-        smalltxtbtn.setOnClickListener(clcksmalltxtbtn);
+        saveBtn = (Button) findViewById(R.id.button1);
+        openBtn = (Button) findViewById(R.id.button2);
+        copyBtn = (Button) findViewById(R.id.button3);
+        pasteBtn = (Button) findViewById(R.id.button4);
+        ctrlzBtn = (Button) findViewById(R.id.button5);
+        ctrlyBtn = (Button) findViewById(R.id.button6);
+        lageTxtBtn = (Button) findViewById(R.id.button7);
+        smallTxtBtn = (Button) findViewById(R.id.button8);
+        saveBtn.setOnClickListener(clckSaveBtn);
+        openBtn.setOnClickListener(clckOpenBtn);
+        copyBtn.setOnClickListener(clckCopyBtn);
+        pasteBtn.setOnClickListener(clckPasteBtn);
+        ctrlzBtn.setOnClickListener(clckCtrlzBtn);
+        ctrlyBtn.setOnClickListener(clckCtrlyBtn);
+        lageTxtBtn.setOnClickListener(clckLageTxtBtn);
+        smallTxtBtn.setOnClickListener(clckSmallTxtBtn);
 
         ctrlz.add(" ");
         ctrly.add(" ");
@@ -78,44 +80,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private View.OnClickListener clcksavebtn = new View.OnClickListener() {
+    private View.OnClickListener clckSaveBtn = new View.OnClickListener() {
         public void onClick(View v) {
             saveFile(FILENAME);
         }
     };
-    private View.OnClickListener clckopenbtn = new View.OnClickListener() {
+    private View.OnClickListener clckOpenBtn = new View.OnClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         public void onClick(View v) {
             openFile(FILENAME);
         }
     };
-    private View.OnClickListener clckcopybtn = new View.OnClickListener() {
+    private View.OnClickListener clckCopyBtn = new View.OnClickListener() {
         public void onClick(View v) {
            copy();
         }
     };
-    private View.OnClickListener clckpastebtn = new View.OnClickListener() {
+    private View.OnClickListener clckPasteBtn = new View.OnClickListener() {
         public void onClick(View v) {
             paste();
             }
     };
-    private View.OnClickListener clckctrlzbtn = new View.OnClickListener() {
+    private View.OnClickListener clckCtrlzBtn = new View.OnClickListener() {
         public void onClick(View v) {
             back();
         }
     };
-    private View.OnClickListener clckctrlybtn = new View.OnClickListener() {
+    private View.OnClickListener clckCtrlyBtn = new View.OnClickListener() {
         public void onClick(View v) {
             ahead();
             }
     };
-    private View.OnClickListener clcklagetxtbtn = new View.OnClickListener() {
+    private View.OnClickListener clckLageTxtBtn = new View.OnClickListener() {
         public void onClick(View v) {
             notePad.setTextSize(TypedValue.COMPLEX_UNIT_SP ,notePad.getTextSize()*1f);
 
         }
     };
-    private View.OnClickListener clcksmalltxtbtn = new View.OnClickListener() {
+    private View.OnClickListener clckSmallTxtBtn = new View.OnClickListener() {
         public void onClick(View v) {
             notePad.setTextSize(TypedValue.COMPLEX_UNIT_SP , notePad.getTextSize()*0.1f);
         }
@@ -124,12 +126,11 @@ public class MainActivity extends AppCompatActivity {
     // Метод для открытия файла
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void openFile(String fileName) { //open text file
-        String openf = "";
         try
         {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     openFileInput(fileName)));
-            // читаем содержимое
+            String openf = "";
             while ((openf = reader.readLine()) != null) {
                 notePad.setText(openf);
             }
@@ -153,19 +154,36 @@ public class MainActivity extends AppCompatActivity {
     }
     // Метод для копирования
     private void copy() {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("", notePad.getText().toString());
-        clipboard.setPrimaryClip(clip);
+        String stringExtr = notePad.getText().toString();
+        int startIndex = notePad.getSelectionStart();
+        int endIndex = notePad.getSelectionEnd();
+        stringExtr = stringExtr.substring(startIndex, endIndex);
+        ClipData clip;
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);;
+        if(startIndex != endIndex) {
+            clip = ClipData.newPlainText("", stringExtr);
+            clipboard.setPrimaryClip(clip);
+        }
+        else {
+            clip = ClipData.newPlainText("", notePad.getText().toString());
+            clipboard.setPrimaryClip(clip);
+        }
     }
     // Метод для вставки
     private void paste() {
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (cb.hasPrimaryClip()) {
+            String strPast1 = notePad.getText().toString();
+            String strPast2 = notePad.getText().toString();
+            int stInd = notePad.getSelectionStart();
+            int endInd = notePad.getSelectionEnd();
+            strPast1 = strPast1.substring(0, stInd);
+            strPast2 = strPast2.substring(endInd, strPast2.length());
             ClipData cd = cb.getPrimaryClip();
-            int index = notePad.getSelectionStart() >= 0 ? notePad.getSelectionStart() : 0;
-            StringBuilder sBuilder = new StringBuilder(cd.getItemAt(0).getText().toString()); sBuilder.insert(index, cd.getItemAt(0).getText().toString());
-            notePad.setText(sBuilder.toString());
-            notePad.setSelection(index + cd.getItemAt(0).getText().toString().length());
+            //String stringPast = cd.getItemAt(0).getText().toString();
+            StringBuilder sBuilder = new StringBuilder(strPast1);
+            sBuilder.insert(stInd, cd.getItemAt(0).getText().toString());
+            notePad.setText(sBuilder.toString()+ strPast2);
         }
     }
 
